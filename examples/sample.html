@@ -8,16 +8,40 @@
     <title></title>
 
     <script language="javascript">
+        var sky_images = '{ \
+            "SKY_O00": 38, \
+            "SKY_O01": 1, \
+            "SKY_O02": 2, \
+            "SKY_O03": 3, \
+            "SKY_O04": 12, \
+            "SKY_O05": 13, \
+            "SKY_O06": 14, \
+            "SKY_O07": 18, \
+            "SKY_O08": 21, \
+            "SKY_O09": 32, \
+            "SKY_O10": 4, \
+            "SKY_O11": 29, \
+            "SKY_O12": 26, \
+            "SKY_O13": 27, \
+            "SKY_O14": 28 \
+        }';
         $(function () {
             PlanetX.init({
                 appkey: "5a1403f8-c7f9-3201-bf5c-5ec75921d26c",   // 본인의 appkey 정보 입력
                 client_id: "558478fd-aafb-32fd-bcf0-91199c5b21e2", // 본인의 client id 정보 입력
             });
+            weather();
         });
 
 
         function weather_callback(data){
-            alert(data.weather.hourly[0].sky.name);
+            var weather_code = data.weather.hourly[0].sky.code;
+            var weather_img = JSON.parse(sky_images)[weather_code] + ".png";
+            $("#weather_image").attr("src", "./weather_icons/" + weather_img);
+
+            var temperature = data.weather.hourly[0].temperature.tc;
+            $("#temperature").text(temperature);
+
         }
         function weather() {
             PlanetX.api( "get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
@@ -32,6 +56,7 @@
     </script>
 </head>
 <body>
-    <button onclick="weather()">Login</button>
+    <div></div><label id="temperature"></label> ℃</div>
+    <img id="weather_image" />
 </body>
 </html>
