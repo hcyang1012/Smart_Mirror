@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="./planetxsdk.js"></script>
+    <title></title>
+
+    <script language="javascript">
+        $(function () {
+            PlanetX.init({
+                appkey: "5a1403f8-c7f9-3201-bf5c-5ec75921d26c",   // 본인의 appkey 정보 입력
+                client_id: "558478fd-aafb-32fd-bcf0-91199c5b21e2", // 본인의 client id 정보 입력
+            });
+        });
+
+
+        function weather_callback(data){
+            alert(data.weather.hourly[0].sky.name);
+        }
+        function weather() {
+            PlanetX.api( "get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
+                {
+                    "version": 1,
+                    "lon": 127.1239976,
+                    "lat": 37.3038171,
+                },
+            weather_callback);
+        }
+
+    </script>
+</head>
+<body>
+    <button onclick="weather()">Login</button>
+</body>
+</html>
