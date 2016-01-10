@@ -12,21 +12,21 @@
 
     <script language="javascript">
         var sky_images = '{ \
-            "SKY_O00": 38, \
-            "SKY_O01": 1, \
-            "SKY_O02": 2, \
-            "SKY_O03": 3, \
-            "SKY_O04": 12, \
-            "SKY_O05": 13, \
-            "SKY_O06": 14, \
-            "SKY_O07": 18, \
-            "SKY_O08": 21, \
-            "SKY_O09": 32, \
-            "SKY_O10": 4, \
-            "SKY_O11": 29, \
-            "SKY_O12": 26, \
-            "SKY_O13": 27, \
-            "SKY_O14": 28 \
+            "SKY_O00": "38", \
+            "SKY_O01": "01", \
+            "SKY_O02": "02", \
+            "SKY_O03": "03", \
+            "SKY_O04": "12", \
+            "SKY_O05": "13", \
+            "SKY_O06": "14", \
+            "SKY_O07": "18", \
+            "SKY_O08": "21", \
+            "SKY_O09": "32", \
+            "SKY_O10": "04", \
+            "SKY_O11": "29", \
+            "SKY_O12": "26", \
+            "SKY_O13": "27", \
+            "SKY_O14": "28" \
         }';
         $(function () {
             PlanetX.init({
@@ -50,6 +50,7 @@
             PlanetX.api( "get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
                 {
                     "version": 1,
+                    /* 마북동 좌표 */
                     "lon": 127.1239976,
                     "lat": 37.3038171,
                 },
