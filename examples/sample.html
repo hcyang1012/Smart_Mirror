@@ -29,6 +29,7 @@
             "SKY_O14": "28" \
         }';
         $(function () {
+            currentTime();
             PlanetX.init({
                 appkey: "5a1403f8-c7f9-3201-bf5c-5ec75921d26c",   // 본인의 appkey 정보 입력
                 client_id: "558478fd-aafb-32fd-bcf0-91199c5b21e2", // 본인의 client id 정보 입력
@@ -37,7 +38,7 @@
         });
 
 
-        function weather_callback(data){
+        function weather_callback(data) {
             var weather_code = data.weather.hourly[0].sky.code;
             var weather_img = JSON.parse(sky_images)[weather_code] + ".png";
             $("#weather_image").attr("src", "./weather_icons/" + weather_img);
@@ -46,8 +47,10 @@
             $("#temperature").text(temperature);
 
         }
+
+
         function weather() {
-            PlanetX.api( "get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
+            PlanetX.api("get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
                 {
                     "version": 1,
                     /* 마북동 좌표 */
@@ -57,18 +60,46 @@
             weather_callback);
         }
 
+
+
+
+        String.prototype.toHHMMSS = function () {
+            var sec_num = parseInt(this, 10); // don't forget the second param
+            var hours = Math.floor(sec_num / 3600);
+            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+            var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+            if (hours < 10) { hours = "0" + hours; }
+            if (minutes < 10) { minutes = "0" + minutes; }
+            if (seconds < 10) { seconds = "0" + seconds; }
+            var time = hours + ':' + minutes + ':' + seconds;
+            return time;
+        }
+
+        function currentTime() {
+            var now = new Date();
+            $("#date").text(now.toLocaleDateString());
+            $("#time").text(now.toLocaleTimeString());
+            setTimeout("currentTime()", 1000);
+        }
+
     </script>
 </head>
 <body>
-    <div class="site-wrapper">
-
-        <div class="site-wrapper-inner">
-
-            <div>
-                <div><label id="temperature"></label> ℃</div>
-                <img id="weather_image" />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-6">
+                <div id="clock" class="text-left" style="margin-top:50px;">
+                        <div><h4 id="date"></h4></div>
+                        <div><h3 id="time"></h3></div>
+                </div>
             </div>
-
+            <div class="col-xs-6>
+                <div id="weather">
+                    <div><h4><label id="temperature"></label> ℃</h4></div>
+                    <img id="weather_image" />
+                </div>
+            </div>
         </div>
     </div>
 </body>
