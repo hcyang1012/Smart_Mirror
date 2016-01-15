@@ -73,11 +73,7 @@
             var strDate = (now.getMonth() + 1) + "월 " + now.getDate() + "일 " + strDates[now.getDay()] + "요일";
 
             var strTime = "";
-            if ((now.getHours() % 12) < 10) {
-                strTime = "0" + (now.getHours() % 12);
-            } else {
-                strTime = (now.getHours() % 12);
-            }
+            strTime = (now.getHours() % 12);
             strTime = strTime + ":";
             if (now.getMinutes() < 10) {
                 strTime = strTime + "0" + now.getMinutes();
