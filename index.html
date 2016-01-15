@@ -88,17 +88,21 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-6">
-                <div id="clock" class="text-left" style="margin-top:50px;">
-                        <div><h4 id="date"></h4></div>
-                        <div><h3 id="time"></h3></div>
-                </div>
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4 text-right">
+                <div><h2 id="date"></h2></div>
             </div>
-            <div class="col-xs-6 text-right">
-                <div id="weather" style="margin-right:10px;">
-                    <div><h4><label id="temperature"></label> ℃</h4></div>
-                    <img id="weather_image" />
-                </div>
+            <div class="col-xs-4">
+                    <div><h3><label id="temperature"></label> ℃</h3></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4 text-right">
+                <div><h1 id="time"></h1></div>
+            </div>
+            <div class="col-xs-4">
+                    <div><img id="weather_image" style="width:70%;" /></div>
             </div>
         </div>
     </div>
