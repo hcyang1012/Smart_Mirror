@@ -44,7 +44,13 @@
             $("#weather_image").attr("src", "./weather_icons/" + weather_img);
 
             var temperature = data.weather.hourly[0].temperature.tc;
-            $("#temperature").text(temperature);
+            var strTemp = "";
+            if (temperature.substr(0, 1) == "-") {
+                strTemp = temperature.substr(0, 2);
+            } else {
+                strTemp = temperature.substr(0, 1);
+            }
+            $("#temperature").text(strTemp);
 
         }
 
@@ -61,50 +67,33 @@
         }
 
 
-
-
-        String.prototype.toHHMMSS = function () {
-            var sec_num = parseInt(this, 10); // don't forget the second param
-            var hours = Math.floor(sec_num / 3600);
-            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-            var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-            if (hours < 10) { hours = "0" + hours; }
-            if (minutes < 10) { minutes = "0" + minutes; }
-            if (seconds < 10) { seconds = "0" + seconds; }
-            var time = hours + ':' + minutes + ':' + seconds;
-            return time;
-        }
-
         function currentTime() {
             var now = new Date();
-            $("#date").text(now.toLocaleDateString());
-            $("#time").text(now.toLocaleTimeString());
+            var strDates = ["일", "월", "화", "수", "목", "금", "토"];
+            var strDate = (now.getMonth() + 1) + "월 " + now.getDate() + "일 " + strDates[now.getDay()] + "요일";
+            var strTime = (now.getHours() % 12) + ":" + now.getMinutes();
+            var strAMPM = (now.getHours() > 12) ? "오후" : "오전";
+            $("#date").text(strDate);
+            $("#time").text(strTime);
+            $("#AMPM").text(strAMPM);
             setTimeout("currentTime()", 1000);
         }
 
     </script>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-4"></div>
-            <div class="col-xs-4 text-right">
-                <div><h2 id="date"></h2></div>
-            </div>
-            <div class="col-xs-4">
-                    <div><h3><label id="temperature"></label> ℃</h3></div>
+    <div class="container" style="width:100%;">
+        <div class="pull-left">            
+            <div style="line-height:15px; margin-top:25px;">
+                <label id="time" style="font-size:50px;"></label>
+                <label id="AMPM" style="font-size:15px;"></label>
+                <div class="text-right"><label id="date" style="font-size:15px;"></label></div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-4"></div>
-            <div class="col-xs-4 text-right">
-                <div><h1 id="time"></h1></div>
-            </div>
-            <div class="col-xs-4">
-                    <div><img id="weather_image" style="width:70%;" /></div>
-            </div>
+        <div class="pull-right" style="font-size:50px;">
+            <img id="weather_image" style="width:20%;" /><label id="temperature" style="margin:10px;"></label><sup style="font-size:30px">℃</sup>
         </div>
     </div>
+
 </body>
 </html>
