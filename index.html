@@ -73,7 +73,10 @@
             var strDate = (now.getMonth() + 1) + "." + now.getDate() + " " + strDates[now.getDay()];
 
             var strTime = "";
-            strTime = (now.getHours() % 12);
+            strTime = now.getHours() % 12;
+            if(strTime == 0){
+                strTime = 12;
+            }
             strTime = strTime + ":";
             if (now.getMinutes() < 10) {
                 strTime = strTime + "0" + now.getMinutes();
