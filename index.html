@@ -9,8 +9,9 @@
     <script type="text/javascript" src="./planetxsdk.js"></script>
     <link href="style.css" rel="stylesheet">
     <title></title>
-
+    
     <script language="javascript">
+        var updated_hour = -10;
         var sky_images = '{ \
             "SKY_O00": "38", \
             "SKY_O01": "01", \
@@ -51,19 +52,26 @@
                 strTemp = temperature.substr(0, 1);
             }
             $("#temperature").text(strTemp);
-
+            
+            var now = new Date();
+            updated_hour = now.getHours();
         }
 
 
         function weather() {
-            PlanetX.api("get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
-                {
-                    "version": 1,
-                    /* 마북동 좌표 */
-                    "lon": 127.1239976,
-                    "lat": 37.3038171,
-                },
-            weather_callback);
+            var now = new Date();
+            if(Math.abs((now.getHours() - updated_hour)) >= 2){
+                PlanetX.api("get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
+                    {
+                        "version": 1,
+                        /* 마북동 좌표 */
+                        "lon": 127.1239976,
+                        "lat": 37.3038171,
+                    },
+                weather_callback);                
+            }
+                /* Updated period : 5mins */
+                setTimeout("weather()",1000*60*5);
         }
 
 
