@@ -69,8 +69,8 @@
 
         function currentTime() {
             var now = new Date();
-            var strDates = ["일", "월", "화", "수", "목", "금", "토"];
-            var strDate = (now.getMonth() + 1) + "월 " + now.getDate() + "일 " + strDates[now.getDay()] + "요일";
+            var strDates = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+            var strDate = (now.getMonth() + 1) + "." + now.getDate() + " " + strDates[now.getDay()];
 
             var strTime = "";
             strTime = (now.getHours() % 12);
@@ -82,7 +82,7 @@
             }
 
 
-            var strAMPM = (now.getHours() > 12) ? "오후" : "오전";
+            var strAMPM = (now.getHours() > 12) ? "PM" : "AM";
             $("#date").text(strDate);
             $("#time").text(strTime);
             $("#AMPM").text(strAMPM);
