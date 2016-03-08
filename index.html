@@ -9,8 +9,10 @@
     <script type="text/javascript" src="./planetxsdk.js"></script>
     <link href="style.css" rel="stylesheet">
     <title></title>
-
+    
     <script language="javascript">
+
+        var updated_hour = -10;
         var sky_images = '{ \
             "SKY_O00": "38", \
             "SKY_O01": "01", \
@@ -30,12 +32,31 @@
         }';
         $(function () {
             currentTime();
+//            bus("241427003"); // 26-1
             PlanetX.init({
                 appkey: "5a1403f8-c7f9-3201-bf5c-5ec75921d26c",   // 본인의 appkey 정보 입력
                 client_id: "558478fd-aafb-32fd-bcf0-91199c5b21e2", // 본인의 client id 정보 입력
             });
             weather();
         });
+
+        function bus(routeid) {
+            key = "RFUxkTgKFEOBN8apUE98WCCpVvljq2FzwmwqfKPEskuJWZYaxlFITPgyIEZQYKBia9ruReDJtVdCj0fshPDsdw%3D%3D";
+            var xhr = new XMLHttpRequest();
+            var url = 'http://openapi.gbis.go.kr/ws/rest/buslocationservice'; /*URL*/
+            var queryParams = '?' + encodeURIComponent('ServiceKey='+key); /*Service Key*/
+            queryParams += '&' + encodeURIComponent('RouteId') + '=' + encodeURIComponent(routeid);
+            queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('999');
+            queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1');
+            xhr.open('GET', url + queryParams);
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    alert('Status: '+this.status+' Headers: '+JSON.stringify(this.getAllResponseHeaders())+' Body: '+this.responseText);
+                }
+            };
+
+            xhr.send('');
+        }
 
 
         function weather_callback(data) {
@@ -44,64 +65,78 @@
             $("#weather_image").attr("src", "./weather_icons/" + weather_img);
 
             var temperature = data.weather.hourly[0].temperature.tc;
-            $("#temperature").text(temperature);
-
+            var strTemp = "";
+            var point_position = temperature.indexOf(".");
+            strTemp = temperature.substr(0, point_position);
+            $("#temperature").text(strTemp);
+            
+            var now = new Date();
+            updated_hour = now.getHours();
         }
 
 
         function weather() {
-            PlanetX.api("get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
-                {
-                    "version": 1,
-                    /* 마북동 좌표 */
-                    "lon": 127.1239976,
-                    "lat": 37.3038171,
-                },
-            weather_callback);
+            var now = new Date();
+            if(Math.abs((now.getHours() - updated_hour)) >= 2){
+                PlanetX.api("get", "http://apis.skplanetx.com/weather/current/hourly", "JSON",
+                    {
+                        "version": 1,
+                        /* 마북동 좌표 */
+                        "lon": 127.1239976,
+                        "lat": 37.3038171,
+                    },
+                weather_callback);                
+            }
+                /* Updated period : 5mins */
+                setTimeout("weather()",1000*60*5);
         }
 
-
-
-
-        String.prototype.toHHMMSS = function () {
-            var sec_num = parseInt(this, 10); // don't forget the second param
-            var hours = Math.floor(sec_num / 3600);
-            var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-            var seconds = sec_num - (hours * 3600) - (minutes * 60);
-
-            if (hours < 10) { hours = "0" + hours; }
-            if (minutes < 10) { minutes = "0" + minutes; }
-            if (seconds < 10) { seconds = "0" + seconds; }
-            var time = hours + ':' + minutes + ':' + seconds;
-            return time;
-        }
 
         function currentTime() {
             var now = new Date();
-            $("#date").text(now.toLocaleDateString());
-            $("#time").text(now.toLocaleTimeString());
+            var strDates = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+            var strDate = (now.getMonth() + 1) + "." + now.getDate() + " " + strDates[now.getDay()];
+
+            var strTime = "";
+            strTime = now.getHours() % 12;
+            if(strTime == 0){
+                strTime = 12;
+            }
+            strTime = strTime + ":";
+            if (now.getMinutes() < 10) {
+                strTime = strTime + "0" + now.getMinutes();
+            } else {
+                strTime = strTime + now.getMinutes();
+            }
+
+
+            var strAMPM = (now.getHours() > 12) ? "PM" : "AM";
+            $("#date").text(strDate);
+            $("#time").text(strTime);
+            $("#AMPM").text(strAMPM);
             setTimeout("currentTime()", 1000);
         }
 
     </script>
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container" style="width:100%; padding:15px;">
         <div class="row">
-            <div class="col-xs-6">
-                <div id="clock" class="text-left" style="margin-top:50px;">
-                        <div><h4 id="date"></h4></div>
-                        <div><h3 id="time"></h3></div>
+            <div class="col-xs-7 text-right" >
+                <div style="line-height:20px; margin-top:60px;">
+                    <label id="time" style="font-size:90px; font-weight:100;"></label>
+                    <label id="AMPM" style="font-size:30px; font-weight:100;"></label>
+                    <div class="text-right"><label id="date" style="font-size:20px; font-weight:100;"></label></div>
                 </div>
             </div>
-            <div class="col-xs-6>
-                <div id="weather">
-                    <div><h4><label id="temperature"></label> ℃</h4></div>
-                    <img id="weather_image" />
-                </div>
+            <div class="col-xs-5 text-left" style="font-size:85px;">
+                <img id="weather_image" style="width:30%;" /><label id="temperature" style="margin:10px; font-weight:100;"></label><sup style="font-size:45px; font-weight:100;">℃</sup>
             </div>
         </div>
-        한글 
-    </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <!--<h1>26-1 : <label id="bus_26_1"></label></h1>-->
+            </div>
+        </div>
 </body>
 </html>
